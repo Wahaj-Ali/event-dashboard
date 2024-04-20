@@ -13,7 +13,10 @@ import { DialogContent } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { IconButton } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { getEventsData } from '../api';
 import Image from "next/image";
 import LoaderImage from '../../assets/loader.svg';
@@ -49,13 +52,24 @@ export default function EvenstList() {
     setDialogOpen(false);
   };
 
+  const handleFavoriteClick = (clickedRow) => {
+    const updatedData = data.map(row => {
+      if (row === clickedRow) {
+        return { ...row, favorite: !row.favorite };
+      }
+      return row;
+    });
+    setData(updatedData);
+  };
+
   React.useEffect(() => {
     const fetchDataFromApi = async () => {
       setLoading(true);
       try {
         const { events } = await getEventsData();
         setLoading(false);
-        setData(events);
+        const initialData = events.map(event => ({ ...event, favorite: false }));
+        setData(initialData);
       } catch (error) {
         setLoading(false);
       }
@@ -116,7 +130,7 @@ export default function EvenstList() {
           </Grid>
           <Grid item sx={{ marginLeft: '10px' }}>
             <Typography variant="body1" sx={{ fontFamily: 'Inter', fontSize: '16px', fontWeight: 400, lineHeight: '23.28px' }}>
-              {selectedRow.country}
+              {selectedRow && selectedRow.country}
             </Typography>
           </Grid>
         </Grid>
@@ -171,6 +185,11 @@ export default function EvenstList() {
                     })()}
                   </TableCell>
                   <TableCell align="left">{row.country}</TableCell>
+                  <TableCell align="left">
+                    <IconButton onClick={(e) => { e.stopPropagation(); handleFavoriteClick(row); }}>
+                      {row.favorite ? <FavoriteIcon sx={{ color: '#DC0000' }} /> : <FavoriteBorderIcon />}
+                    </IconButton>
+                  </TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
