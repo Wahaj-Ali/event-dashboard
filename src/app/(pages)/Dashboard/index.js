@@ -8,12 +8,13 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { alpha } from '@mui/material/styles';
 import Image from 'next/image'
@@ -24,6 +25,7 @@ import Events from '@/components/events';
 import EvenstList from '@/components/eventList';
 import logo from '../../../assets/logo.png';
 import { getEventsData } from '@/components/api';
+import vector from '../../../assets/Vector.png';
 
 const drawerWidth = 240;
 
@@ -124,8 +126,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   height: 400,
   overflowY: 'auto',
   boxShadow: 'none',
-  width: 'fit-content',
-  maxWidth: '60vw',
+
   '&::-webkit-scrollbar': {
     width: 4,
   },
@@ -136,19 +137,103 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     background: '#888',
     borderRadius: 4,
   },
-  '@media (min-width: 1020px)': {
-    maxWidth: '90vw',
-    minWidth: 'auto'
-  },
-  '@media (max-width: 768px)': {
-    maxWidth: '80vw',
-    minWidth: 'auto'
-  },
+
 }));
+
+
+const NewSection = () => {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  const handleFavoriteClick = (clickedRow) => {
+    const updatedData = data.map(row => {
+      if (row === clickedRow) {
+        return { ...row, favorite: !row.favorite };
+      }
+      return row;
+    });
+    setData(updatedData);
+  };
+
+  React.useEffect(() => {
+    const fetchDataFromApi = async () => {
+      setLoading(true);
+      try {
+        const { events } = await getEventsData();
+        setLoading(false);
+        const initialData = events.map(event => ({ ...event, favorite: false }));
+        setData(initialData);
+      } catch (error) {
+        setLoading(false);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+    fetchDataFromApi();
+  }, []);
+  return (
+    <Box>
+
+      <Grid item xs={12} >
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: '20px',
+            backgroundColor: '#5041BC',
+          }}
+        >
+          <Typography component="h2" variant="h2" color="#FFFFFF"
+            sx={{
+              display: 'flex',
+              marginBottom: '8px',
+              fontSize: '34px',
+            }}
+          >
+            <span style={{ width: '60%' }}>Event of the month</span>
+            <Image
+              src={vector}
+              alt="Image"
+              style={{ marginLeft: 'auto' }}
+            />
+          </Typography>
+          <Grid item lg={12}>
+            <Paper
+              sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                borderRadius: '20px',
+              }}
+            >
+              <Typography component="h4" variant="h7" color="#5041BC" gutterBottom
+                sx={{
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  fontFamily: 'Inter',
+                  borderRadius: '20px',
+                }}
+              >
+                Web Development
+              </Typography>
+
+              <Typography variant="body1"  sx={{display:'flex', alignItems:'center', fontFamily: 'Inter', fontSize: '12px', fontWeight: 400, lineHeight: '23.28px' }}>
+                <LocationOnIcon fontSize="medium" sx={{ color: '#5041BC' }}/>US
+              </Typography>
+            </Paper>
+          </Grid>
+        </Paper>
+      </Grid>
+
+    </Box>
+  );
+};
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(false);
-  
+
 
   const [activeItem, setActiveItem] = React.useState(0);
   const [eventsCount, setEventsCount] = React.useState(0);
@@ -237,20 +322,25 @@ export default function Dashboard() {
         <Box
           component="main"
           sx={{
-            
+
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4,  ml: { xs: 0, lg: 1 }  }}>
+          <Container maxWidth="xl" sx={{ mt: 4, mb: 4, ml: { xs: 0, lg: 1 } }}>
             <Grid container spacing={3}>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} md={8} lg={9}>
                 <StyledPaper >
                   <EvenstList />
                 </StyledPaper>
+              </Grid>
+
+              {/* Grid item for the new section */}
+              <Grid item xs={12} md={4} lg={3}>
+                <NewSection />
               </Grid>
 
               {/* All Events */}
@@ -276,7 +366,7 @@ export default function Dashboard() {
                     borderRadius: '20px',
                   }}
                 >
-                  <Events title='This Month Events' number={2}/>
+                  <Events title='This Month Events' number={2} />
                 </Paper>
               </Grid>
 
@@ -295,11 +385,11 @@ export default function Dashboard() {
               {/* Recent Orders */}
 
             </Grid>
-            
+
           </Container>
         </Box>
 
-        
+
       </Box>
     </ThemeProvider>
   );
