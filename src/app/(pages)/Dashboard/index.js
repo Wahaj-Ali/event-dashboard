@@ -147,10 +147,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Dashboard() {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const [open, setOpen] = React.useState(false);
+  
 
   const [activeItem, setActiveItem] = React.useState(0);
   const [eventsCount, setEventsCount] = React.useState(0);
@@ -188,7 +186,6 @@ export default function Dashboard() {
               edge="start"
               color="inherit"
               aria-label="open drawer"
-              onClick={toggleDrawer}
               sx={{
                 marginRight: '36px',
                 ...(open && { display: 'none' }),
@@ -222,7 +219,7 @@ export default function Dashboard() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
+            <IconButton >
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
