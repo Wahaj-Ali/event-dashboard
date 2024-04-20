@@ -326,6 +326,7 @@ export default function Dashboard() {
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
+            overflowX: 'hidden',
           }}
         >
           <Toolbar />
