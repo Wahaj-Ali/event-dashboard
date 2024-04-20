@@ -7,7 +7,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 43.5vh;
-  width: 100%;
+  width: 850px;
 }
 
 .events-paper::-webkit-scrollbar {
@@ -25,4 +25,10 @@ body {
   /* color of the thumb */
   border-radius: 4px;
   /* roundness of the thumb */
+}
+
+@media (max-width: 1023px) {
+  .text-center {
+    width: 80vw; /* Adjust width for smaller screens */
+  }
 }
