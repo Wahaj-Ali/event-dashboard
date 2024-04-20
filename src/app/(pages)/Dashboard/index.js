@@ -125,7 +125,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   overflowY: 'auto',
   boxShadow: 'none',
   width: 'fit-content',
-  minWidth: '850px',
+  maxWidth: '60vw',
   '&::-webkit-scrollbar': {
     width: 4,
   },
@@ -136,8 +136,12 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     background: '#888',
     borderRadius: 4,
   },
-  '@media (max-width: 600px)': {
-    width: '80vw',
+  '@media (min-width: 1020px)': {
+    maxWidth: '90vw',
+    minWidth: 'auto'
+  },
+  '@media (max-width: 768px)': {
+    maxWidth: '80vw',
     minWidth: 'auto'
   },
 }));
