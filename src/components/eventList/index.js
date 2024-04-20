@@ -187,7 +187,7 @@ export default function EvenstList() {
                   <TableCell align="left">{row.country}</TableCell>
                   <TableCell align="left">
                     <IconButton onClick={(e) => { e.stopPropagation(); handleFavoriteClick(row); }}>
-                      {row.favorite ? <FavoriteIcon sx={{ color: '#DC0000' }} /> : <FavoriteBorderIcon />}
+                      {row.favorite ? <FavoriteIcon sx={{ color: '#DC0000' }} /> : <FavoriteBorderIcon sx={{ color: '#5041BC' }} />}
                     </IconButton>
                   </TableCell>
                 </StyledTableRow>
